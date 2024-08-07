@@ -11,22 +11,22 @@ class MenuScreen extends StatelessWidget {
     Food(
         image: Image.asset("lib/images/sushi.png"),
         rating: "2.4",
-        price: "\$22.5",
+        price: 22.5,
         name: "Salmon Sushi"),
     Food(
         image: Image.asset("lib/images/sushi-2.png"),
         rating: "4.4",
-        price: "\$21.5",
+        price: 21.5,
         name: "Tex Sushi"),
     Food(
         image: Image.asset("lib/images/sushi-3.png"),
         rating: "5.0",
-        price: "\$12.5",
+        price: 12.5,
         name: "Sora Sushi"),
     Food(
         image: Image.asset("lib/images/sushi-4.png"),
         rating: "3.2",
-        price: "\$18.2",
+        price: 18.2,
         name: "Wumini Sushi"),
   ];
 
@@ -122,9 +122,7 @@ class Discount extends StatelessWidget {
                 height: Sizes.giant * 2,
                 child: FilledButton(
                     onPressed: () => {},
-                    style: const ButtonStyle(
-                        backgroundColor: WidgetStatePropertyAll(
-                            Color.fromARGB(109, 140, 94, 91))),
+                    style: FilledButton.styleFrom(backgroundColor: buttonColor),
                     child: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -172,7 +170,7 @@ class _SearchFieldState extends State<SearchField> {
 class Food {
   Image image;
   String rating;
-  String price;
+  double price;
   String name;
 
   Food(
@@ -214,7 +212,7 @@ class FoodTile extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(food.price),
+              Text("\$${food.price}"),
               Row(
                 children: [
                   Icon(

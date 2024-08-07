@@ -34,9 +34,8 @@ class IntroScreen extends StatelessWidget {
                     child: FilledButton(
                         onPressed: () =>
                             Navigator.pushNamed(context, "/menuPage"),
-                        style: const ButtonStyle(
-                            backgroundColor: WidgetStatePropertyAll(
-                                Color.fromARGB(109, 140, 94, 91))),
+                        style: FilledButton.styleFrom(
+                            backgroundColor: buttonColor),
                         child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
