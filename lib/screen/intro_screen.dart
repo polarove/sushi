@@ -22,7 +22,7 @@ class IntroScreen extends StatelessWidget {
                           style: GoogleFonts.dmSerifDisplay(
                               color: Colors.white,
                               fontSize: Sizes.extraLarge * 2)),
-                      Image.asset("lib/images/sushi-type-1.png"),
+                      Image.asset("lib/assets/images/sushi-type-1.png"),
                       Text("THE TAST OF JAPANESE FOOD",
                           style: GoogleFonts.dmSerifDisplay(
                               color: Colors.white,

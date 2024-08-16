@@ -1,4 +1,4 @@
-
+import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 
 class FoodDetailPage extends StatefulWidget {
   const FoodDetailPage({super.key, required this.food});
-  final Food food;
+  final FoodVO food;
 
   @override
   State<FoodDetailPage> createState() => _FoodDetailPageState();
@@ -41,7 +41,7 @@ class _FoodDetailPageState extends State<FoodDetailPage> {
                     width: MediaQuery.of(context).devicePixelRatio * 167,
                     padding: const EdgeInsets.symmetric(
                         horizontal: Sizes.giant * 4, vertical: Sizes.giant * 2),
-                    child: widget.food.image,
+                    child: Image.asset(widget.food.imagePath),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
@@ -143,7 +143,7 @@ class _FoodDetailPageState extends State<FoodDetailPage> {
 
 class FoodQuantities extends StatefulWidget {
   const FoodQuantities({super.key, required this.food});
-  final Food food;
+  final FoodVO food;
 
   @override
   State<StatefulWidget> createState() => _FoodQuantitiesState();
@@ -152,6 +152,12 @@ class FoodQuantities extends StatefulWidget {
 class _FoodQuantitiesState extends State<FoodQuantities> {
   double _currentPrice = 0.00;
   int _quantity = 1;
+  FoodBO get food => FoodBO(
+      unitPrice: widget.food.price,
+      imagePath: widget.food.imagePath,
+      name: widget.food.name,
+      minQuantity: 1,
+      maxQuantity: 3);
 
   @override
   void initState() {
@@ -160,18 +166,38 @@ class _FoodQuantitiesState extends State<FoodQuantities> {
   }
 
   void decreaseQuantity() {
+    if (_quantity <= food.minQuantity) {
+      showToast("At lease ${food.minQuantity} should be ordered",
+          context: context,
+          position: const StyledToastPosition(align: Alignment.center),
+          animation: StyledToastAnimation.fadeScale,
+          animDuration: const Duration(milliseconds: 67));
+      return;
+    }
     setState(() {
       if (_quantity > 0) {
         _quantity -= 1;
-        _currentPrice = widget.food.price * _quantity;
+        _currentPrice = (Decimal.parse(widget.food.price.toString()) *
+                Decimal.parse(_quantity.toString()))
+            .toDouble();
       }
     });
   }
 
   void increaseQuantity() {
+    if (_quantity >= food.maxQuantity) {
+      showToast("You can only order ${food.maxQuantity} items at a time",
+          context: context,
+          position: const StyledToastPosition(align: Alignment.center),
+          animation: StyledToastAnimation.fadeScale,
+          animDuration: const Duration(milliseconds: 67));
+      return;
+    }
     setState(() {
       _quantity++;
-      _currentPrice = widget.food.price * _quantity;
+      _currentPrice = (Decimal.parse(widget.food.price.toString()) *
+              Decimal.parse(_quantity.toString()))
+          .toDouble();
     });
   }
 
@@ -232,22 +258,18 @@ class _FoodQuantitiesState extends State<FoodQuantities> {
   }
 
   void addToCart() {
-    // only if the quantity is greater than 0
-    if (_quantity > 0) {
-      // get access to the cart
-      final cart = context.read<Cart>();
+    final cart = context.read<Cart>();
 
-      // add to cart
-      cart.addToCart(widget.food, _quantity);
+    // add to cart
+    cart.addToCart(CartItem(item: food, quantity: _quantity));
 
-      // notify the user about the reuslt
-      showToast("Added to cart",
-          context: context,
-          position: const StyledToastPosition(align: Alignment.center),
-          animation: StyledToastAnimation.fadeScale,
-          animDuration: const Duration(milliseconds: 67));
+    // notify the user about the reuslt
+    showToast("$_quantity ${food.name} have been added to cart, enjoy.",
+        context: context,
+        position: const StyledToastPosition(align: Alignment.center),
+        animation: StyledToastAnimation.fadeScale,
+        animDuration: const Duration(milliseconds: 67));
 
-      Navigator.pop(context);
-    }
+    Navigator.pop(context);
   }
 }

@@ -18,7 +18,7 @@ class MenuScreen extends StatefulWidget {
 
 class _MenuScreenState extends State<MenuScreen> {
   // navigate to details page of the food
-  List<Food> foodMenu = [];
+  List<FoodVO> foodMenu = [];
 
   @override
   void initState() {
@@ -103,7 +103,7 @@ class Discount extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          Image.asset("lib/images/sushi.png"),
+          Image.asset("lib/assets/images/sushi.png"),
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -163,7 +163,7 @@ class _SearchFieldState extends State<SearchField> {
 class FoodTile extends StatelessWidget {
   const FoodTile({super.key, required this.food});
 
-  final Food food;
+  final FoodVO food;
 
   @override
   Widget build(BuildContext context) {
@@ -180,7 +180,7 @@ class FoodTile extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(vertical: Sizes.large),
-            child: food.image,
+            child: Image.asset(food.imagePath),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: Sizes.large),
@@ -235,7 +235,7 @@ class Favorite extends StatelessWidget {
         children: [
           Row(
             children: [
-              Image.asset('lib/images/sushi-3.png'),
+              Image.asset('lib/assets/images/sushi-3.png'),
               const SizedBox(
                 width: Sizes.giant,
               ),
