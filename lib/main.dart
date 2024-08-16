@@ -5,10 +5,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sushi/constants/theme.dart';
+import 'package:sushi/models/cart.dart';
 
 import 'package:sushi/screen/intro_screen.dart';
 import 'package:sushi/screen/menu_screen.dart';
-import 'package:sushi/store/cart.dart';
 
 void main() {
   runApp(
@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
       home: const IntroScreen(),
       routes: {
         "/intropage": (context) => const IntroScreen(),
-        "/menuPage": (context) => MenuScreen(),
+        "/menuPage": (context) => const MenuScreen(),
       },
     );
   }

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sushi/constants/size.dart';
 import 'package:sushi/constants/theme.dart';
-
-import 'package:sushi/screen/menu_screen.dart';
+import 'package:sushi/models/cart.dart';
+import 'package:sushi/models/food.dart';
+import 'package:provider/provider.dart';
 
 class FoodDetailPage extends StatefulWidget {
   const FoodDetailPage({super.key, required this.food});
@@ -121,27 +123,13 @@ class _FoodDetailPageState extends State<FoodDetailPage> {
             Align(
                 alignment: Alignment.bottomCenter,
                 child: Container(
-                    height: MediaQuery.of(context).devicePixelRatio * 67,
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(
-                        vertical: Sizes.large, horizontal: Sizes.giant),
-                    decoration: const BoxDecoration(color: primaryColor),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        FoodQuantities(food: widget.food),
-                        const SizedBox(
-                          height: Sizes.large,
-                        ),
-                        SizedBox(
-                          height: Sizes.giant * 3,
-                          width: double.infinity,
-                          child: FilledButton(
-                              onPressed: () => {},
-                              child: const Text("Add to cart")),
-                        )
-                      ],
-                    )))
+                  height: MediaQuery.of(context).devicePixelRatio * 67,
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(
+                      vertical: Sizes.large, horizontal: Sizes.giant),
+                  decoration: const BoxDecoration(color: primaryColor),
+                  child: FoodQuantities(food: widget.food),
+                ))
           ],
         ));
   }
@@ -183,44 +171,75 @@ class _FoodQuantitiesState extends State<FoodQuantities> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Column(
       children: [
-        // price
-        SizedBox(
-          width: 120,
-          child: Text(
-            "\$$_currentPrice",
-            style: const TextStyle(
-                color: Colors.white, fontSize: Sizes.giant * 1.5),
-          ),
-        ),
-        // minus button
         Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            FilledButton(
-                onPressed: () => decreaseQuantity(),
-                style: FilledButton.styleFrom(backgroundColor: buttonColor),
-                child: const Icon(Icons.remove)),
-
-            // count
-            Container(
-              alignment: Alignment.center,
-              width: 50,
+            // price
+            SizedBox(
+              width: 120,
               child: Text(
-                _quantity.toString(),
-                style:
-                    const TextStyle(color: Colors.white, fontSize: Sizes.giant),
+                "\$$_currentPrice",
+                style: const TextStyle(
+                    color: Colors.white, fontSize: Sizes.giant * 1.5),
               ),
             ),
-            // plus button
-            FilledButton(
-                onPressed: () => increaseQuantity(),
-                style: FilledButton.styleFrom(backgroundColor: buttonColor),
-                child: const Icon(Icons.add)),
+            // minus button
+            Row(
+              children: [
+                FilledButton(
+                    onPressed: () => decreaseQuantity(),
+                    style: FilledButton.styleFrom(backgroundColor: buttonColor),
+                    child: const Icon(Icons.remove)),
+
+                // count
+                Container(
+                  alignment: Alignment.center,
+                  width: 50,
+                  child: Text(
+                    _quantity.toString(),
+                    style: const TextStyle(
+                        color: Colors.white, fontSize: Sizes.giant),
+                  ),
+                ),
+                // plus button
+                FilledButton(
+                    onPressed: () => increaseQuantity(),
+                    style: FilledButton.styleFrom(backgroundColor: buttonColor),
+                    child: const Icon(Icons.add)),
+              ],
+            )
           ],
+        ),
+        const SizedBox(
+          height: Sizes.giant,
+        ),
+        SizedBox(
+          height: Sizes.giant * 3,
+          width: double.infinity,
+          child: FilledButton(
+              onPressed: () => addToCart(), child: const Text("Add to cart")),
         )
       ],
     );
+  }
+
+  void addToCart() {
+    // only if the quantity is greater than 0
+    if (_quantity > 0) {
+      // get access to the cart
+      final cart = context.read<Cart>();
+
+      // add to cart
+      cart.addToCart(widget.food, _quantity);
+
+      // notify the user about the reuslt
+      showToast("Added to cart",
+          context: context,
+          position: const StyledToastPosition(align: Alignment.center),
+          animation: StyledToastAnimation.fadeScale,
+          animDuration: const Duration(milliseconds: 67));
+    }
   }
 }

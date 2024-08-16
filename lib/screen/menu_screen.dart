@@ -1,11 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:sushi/constants/size.dart';
 import 'package:sushi/constants/theme.dart';
+import 'package:sushi/models/cart.dart';
+import 'package:sushi/models/food.dart';
 import 'package:sushi/pages/detail_page.dart';
+import 'package:sushi/utils/app_router.dart';
 
-class MenuScreen extends StatelessWidget {
+class MenuScreen extends StatefulWidget {
   const MenuScreen({super.key});
+
+  @override
+  State<MenuScreen> createState() => _MenuScreenState();
+}
+
+class _MenuScreenState extends State<MenuScreen> {
+  // navigate to details page of the food
+  List<Food> foodMenu = [];
+
+  void navigateToFoodDetails(int index) =>
+      Approuter.push(context, FoodDetailPage(food: foodMenu[index]));
+
+  @override
+  void initState() {
+    super.initState();
+    final cart = context.read<Cart>();
+    foodMenu = cart.foodMenu;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,7 +68,20 @@ class MenuScreen extends StatelessWidget {
                     color: Colors.grey[800],
                     fontSize: Sizes.giant),
               ),
-              Expanded(child: FoodRecommendations()),
+              Expanded(
+                  child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: foodMenu.length,
+                      padding:
+                          const EdgeInsets.symmetric(vertical: Sizes.large),
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () => navigateToFoodDetails(index),
+                          child: FoodTile(
+                            food: foodMenu[index],
+                          ),
+                        );
+                      })),
               const Favorite()
             ],
           ),
@@ -122,66 +158,6 @@ class _SearchFieldState extends State<SearchField> {
         hintText: "Search here...",
       ),
     );
-  }
-}
-
-class Food {
-  Image image;
-  String rating;
-  double price;
-  String name;
-
-  Food(
-      {required this.image,
-      required this.rating,
-      required this.price,
-      required this.name});
-}
-
-class FoodRecommendations extends StatelessWidget {
-  FoodRecommendations({super.key});
-
-  final List foodMenu = [
-    Food(
-        image: Image.asset("lib/images/sushi.png"),
-        rating: "2.4",
-        price: 22.5,
-        name: "Salmon Sushi"),
-    Food(
-        image: Image.asset("lib/images/sushi-2.png"),
-        rating: "4.4",
-        price: 21.5,
-        name: "Tex Sushi"),
-    Food(
-        image: Image.asset("lib/images/sushi-3.png"),
-        rating: "5.0",
-        price: 12.5,
-        name: "Sora Sushi"),
-    Food(
-        image: Image.asset("lib/images/sushi-4.png"),
-        rating: "3.2",
-        price: 18.2,
-        name: "Wumini Sushi"),
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: foodMenu.length,
-        padding: const EdgeInsets.symmetric(vertical: Sizes.large),
-        itemBuilder: (context, index) {
-          final food = foodMenu[index];
-          return GestureDetector(
-            onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => FoodDetailPage(food: food))),
-            child: FoodTile(
-              food: food,
-            ),
-          );
-        });
   }
 }
 
