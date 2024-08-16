@@ -95,7 +95,6 @@ class Cart extends ChangeNotifier {
             currentQuantity: value.quantity,
             minQuantity: value.item.minQuantity))
         .then((onValue) => update());
-    update();
   }
 
   // remove from cart
