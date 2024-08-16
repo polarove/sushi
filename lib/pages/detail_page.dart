@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -17,6 +18,11 @@ class FoodDetailPage extends StatefulWidget {
 
 class _FoodDetailPageState extends State<FoodDetailPage> {
   _FoodDetailPageState();
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -240,6 +246,8 @@ class _FoodQuantitiesState extends State<FoodQuantities> {
           position: const StyledToastPosition(align: Alignment.center),
           animation: StyledToastAnimation.fadeScale,
           animDuration: const Duration(milliseconds: 67));
+
+      Navigator.pop(context);
     }
   }
 }

@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
       ),
       home: const IntroScreen(),
       routes: {
-        "/intropage": (context) => const IntroScreen(),
+        "/introPage": (context) => const IntroScreen(),
         "/menuPage": (context) => const MenuScreen(),
       },
     );

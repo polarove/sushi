@@ -5,6 +5,7 @@ import 'package:sushi/constants/size.dart';
 import 'package:sushi/constants/theme.dart';
 import 'package:sushi/models/cart.dart';
 import 'package:sushi/models/food.dart';
+import 'package:sushi/pages/cart_page.dart';
 import 'package:sushi/pages/detail_page.dart';
 import 'package:sushi/utils/app_router.dart';
 
@@ -18,9 +19,6 @@ class MenuScreen extends StatefulWidget {
 class _MenuScreenState extends State<MenuScreen> {
   // navigate to details page of the food
   List<Food> foodMenu = [];
-
-  void navigateToFoodDetails(int index) =>
-      Approuter.push(context, FoodDetailPage(food: foodMenu[index]));
 
   @override
   void initState() {
@@ -43,7 +41,7 @@ class _MenuScreenState extends State<MenuScreen> {
               padding: const EdgeInsets.only(right: Sizes.extraLarge),
               child: InkWell(
                   borderRadius: BorderRadius.circular(Sizes.extraLarge),
-                  onTap: () => {},
+                  onTap: () => Approuter.push(context, const CartPage()),
                   child: const Padding(
                     padding: EdgeInsets.all(Sizes.small),
                     child: Icon(Icons.shopping_cart),
@@ -76,7 +74,8 @@ class _MenuScreenState extends State<MenuScreen> {
                           const EdgeInsets.symmetric(vertical: Sizes.large),
                       itemBuilder: (context, index) {
                         return GestureDetector(
-                          onTap: () => navigateToFoodDetails(index),
+                          onTap: () => Approuter.push(
+                              context, FoodDetailPage(food: foodMenu[index])),
                           child: FoodTile(
                             food: foodMenu[index],
                           ),
