@@ -88,13 +88,15 @@ class Cart extends ChangeNotifier {
       notifyListeners();
     }
 
-    lessThan(
-            currentQuantity: value.quantity,
-            maxQuantity: value.item.maxQuantity)
-        .then((onValue) => greaterThan(
-            currentQuantity: value.quantity,
-            minQuantity: value.item.minQuantity))
-        .then((onValue) => update());
+    // lessThan(
+    //         currentQuantity: value.quantity,
+    //         maxQuantity: value.item.maxQuantity)
+    //     .then((onValue) => greaterThan(
+    //         currentQuantity: value.quantity,
+    //         minQuantity: value.item.minQuantity))
+    //     .then((onValue) => update());
+
+    update();
   }
 
   // remove from cart
