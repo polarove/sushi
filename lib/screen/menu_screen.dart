@@ -5,93 +5,51 @@ import 'package:sushi/constants/theme.dart';
 import 'package:sushi/pages/detail_page.dart';
 
 class MenuScreen extends StatelessWidget {
-  MenuScreen({super.key});
-
-  final List foodMenu = [
-    Food(
-        image: Image.asset("lib/images/sushi.png"),
-        rating: "2.4",
-        price: 22.5,
-        name: "Salmon Sushi"),
-    Food(
-        image: Image.asset("lib/images/sushi-2.png"),
-        rating: "4.4",
-        price: 21.5,
-        name: "Tex Sushi"),
-    Food(
-        image: Image.asset("lib/images/sushi-3.png"),
-        rating: "5.0",
-        price: 12.5,
-        name: "Sora Sushi"),
-    Food(
-        image: Image.asset("lib/images/sushi-4.png"),
-        rating: "3.2",
-        price: 18.2,
-        name: "Wumini Sushi"),
-  ];
-
+  const MenuScreen({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200],
-      appBar: AppBar(
-        title: const Text("Sushi"),
-        leading: const Icon(Icons.menu),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: Sizes.extraLarge),
-            child: InkWell(
-                borderRadius: BorderRadius.circular(Sizes.extraLarge),
-                onTap: () => {},
-                child: const Padding(
-                  padding: EdgeInsets.all(Sizes.small),
-                  child: Icon(Icons.shopping_cart),
-                )),
-          ),
-        ],
-      ),
-      body: Container(
-        padding: const EdgeInsets.symmetric(horizontal: Sizes.extraLarge),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Discount(),
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: Sizes.giant),
-              child: SearchField(),
+        backgroundColor: Colors.grey[200],
+        appBar: AppBar(
+          title: const Text("Sushi"),
+          leading: const Icon(Icons.menu),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(right: Sizes.extraLarge),
+              child: InkWell(
+                  borderRadius: BorderRadius.circular(Sizes.extraLarge),
+                  onTap: () => {},
+                  child: const Padding(
+                    padding: EdgeInsets.all(Sizes.small),
+                    child: Icon(Icons.shopping_cart),
+                  )),
             ),
-            Text(
-              "Food Menu",
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.grey[800],
-                  fontSize: Sizes.giant),
-            ),
-            Expanded(
-                child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: foodMenu.length,
-                    padding: const EdgeInsets.symmetric(vertical: Sizes.large),
-                    itemBuilder: (context, index) {
-                      final food = foodMenu[index];
-                      return GestureDetector(
-                        onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    FoodDetailPage(food: food))),
-                        child: FoodTile(
-                          food: food,
-                        ),
-                      );
-                    })),
-            const Favorite()
           ],
         ),
-      ),
-    );
+        body: Container(
+          padding: const EdgeInsets.symmetric(horizontal: Sizes.extraLarge),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Discount(),
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: Sizes.giant),
+                child: SearchField(),
+              ),
+              Text(
+                "Food Menu",
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey[800],
+                    fontSize: Sizes.giant),
+              ),
+              Expanded(child: FoodRecommendations()),
+              const Favorite()
+            ],
+          ),
+        ));
   }
 }
 
@@ -110,6 +68,7 @@ class Discount extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
+          Image.asset("lib/images/sushi.png"),
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -140,7 +99,6 @@ class Discount extends StatelessWidget {
               ),
             ],
           ),
-          Image.asset("lib/images/sushi.png")
         ],
       ),
     );
@@ -180,6 +138,53 @@ class Food {
       required this.name});
 }
 
+class FoodRecommendations extends StatelessWidget {
+  FoodRecommendations({super.key});
+
+  final List foodMenu = [
+    Food(
+        image: Image.asset("lib/images/sushi.png"),
+        rating: "2.4",
+        price: 22.5,
+        name: "Salmon Sushi"),
+    Food(
+        image: Image.asset("lib/images/sushi-2.png"),
+        rating: "4.4",
+        price: 21.5,
+        name: "Tex Sushi"),
+    Food(
+        image: Image.asset("lib/images/sushi-3.png"),
+        rating: "5.0",
+        price: 12.5,
+        name: "Sora Sushi"),
+    Food(
+        image: Image.asset("lib/images/sushi-4.png"),
+        rating: "3.2",
+        price: 18.2,
+        name: "Wumini Sushi"),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: foodMenu.length,
+        padding: const EdgeInsets.symmetric(vertical: Sizes.large),
+        itemBuilder: (context, index) {
+          final food = foodMenu[index];
+          return GestureDetector(
+            onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => FoodDetailPage(food: food))),
+            child: FoodTile(
+              food: food,
+            ),
+          );
+        });
+  }
+}
+
 class FoodTile extends StatelessWidget {
   const FoodTile({super.key, required this.food});
 
@@ -188,7 +193,7 @@ class FoodTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 200,
+      width: MediaQuery.of(context).devicePixelRatio * 50,
       decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(Sizes.giant)),
@@ -244,7 +249,7 @@ class Favorite extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(
           horizontal: Sizes.giant, vertical: Sizes.medium),
-      height: 130,
+      height: MediaQuery.of(context).devicePixelRatio * 40,
       decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(Sizes.giant)),

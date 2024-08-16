@@ -115,50 +115,68 @@ class _FoodDetailPageState extends State<FoodDetailPage> {
                 left: 0,
                 right: 0,
                 child: Container(
-                  height: 100,
-                  decoration: const BoxDecoration(color: primaryColor),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      // price
-                      SizedBox(
-                        width: 120,
-                        child: Text(
-                          "\$$_currentPrice",
-                          style: const TextStyle(
-                              color: Colors.white, fontSize: Sizes.giant * 1.5),
-                        ),
-                      ),
-                      // minus button
-                      Row(
-                        children: [
-                          FilledButton(
-                              onPressed: () => decreaseQuantity(),
-                              style: FilledButton.styleFrom(
-                                  backgroundColor: buttonColor),
-                              child: const Icon(Icons.remove)),
-
-                          // count
-                          Container(
-                            alignment: Alignment.center,
-                            width: 50,
-                            child: Text(
-                              _quantity.toString(),
-                              style: const TextStyle(
-                                  color: Colors.white, fontSize: Sizes.giant),
+                    padding: const EdgeInsets.symmetric(vertical: Sizes.large),
+                    decoration: const BoxDecoration(color: primaryColor),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            // price
+                            SizedBox(
+                              width: 120,
+                              child: Text(
+                                "\$$_currentPrice",
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: Sizes.giant * 1.5),
+                              ),
                             ),
-                          ),
-                          // plus button
-                          FilledButton(
-                              onPressed: () => increaseQuantity(),
-                              style: FilledButton.styleFrom(
-                                  backgroundColor: buttonColor),
-                              child: const Icon(Icons.add)),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
+                            // minus button
+                            Row(
+                              children: [
+                                FilledButton(
+                                    onPressed: () => decreaseQuantity(),
+                                    style: FilledButton.styleFrom(
+                                        backgroundColor: buttonColor),
+                                    child: const Icon(Icons.remove)),
+
+                                // count
+                                Container(
+                                  alignment: Alignment.center,
+                                  width: 50,
+                                  child: Text(
+                                    _quantity.toString(),
+                                    style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: Sizes.giant),
+                                  ),
+                                ),
+                                // plus button
+                                FilledButton(
+                                    onPressed: () => increaseQuantity(),
+                                    style: FilledButton.styleFrom(
+                                        backgroundColor: buttonColor),
+                                    child: const Icon(Icons.add)),
+                              ],
+                            )
+                          ],
+                        ),
+                        const SizedBox(
+                          height: Sizes.large,
+                        ),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: Sizes.extraLarge),
+                          height: Sizes.giant * 3,
+                          width: double.infinity,
+                          child: FilledButton(
+                              onPressed: () => {},
+                              child: const Text("Add to cart")),
+                        )
+                      ],
+                    )),
               )
             ],
           ),
