@@ -105,11 +105,11 @@ class _CartPageState extends State<CartPage> {
                                 ),
                               ),
                               Padding(
-                                padding: EdgeInsets.symmetric(
+                                padding: const EdgeInsets.symmetric(
                                     horizontal: Sizes.large),
                                 child: Text(
                                   value.cart[index].quantity.toString(),
-                                  style: TextStyle(fontSize: Sizes.giant),
+                                  style: const TextStyle(fontSize: Sizes.giant),
                                 ),
                               ),
                               InkWell(
