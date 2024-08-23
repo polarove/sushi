@@ -14,6 +14,38 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
+  void makeToast(String message, {required BuildContext context}) {
+    showToast(
+      message,
+      context: context,
+      position: const StyledToastPosition(align: Alignment.center),
+      animation: StyledToastAnimation.fadeScale,
+      animDuration: const Duration(milliseconds: 67),
+    );
+  }
+
+  void handleMinusQuantity(Cart value, int index) {
+    try {
+      value.decreaseItemQuantityInCart(index: index, quantity: 1);
+    } catch (e) {
+      makeToast(
+        e.toString().split(":")[1],
+        context: context,
+      );
+    }
+  }
+
+  void handleIncreaseQuantity(Cart value, int index) {
+    try {
+      value.increaseItemQuantityInCart(index: index, quantity: 1);
+    } catch (e) {
+      makeToast(
+        e.toString().split(":")[1],
+        context: context,
+      );
+    }
+  }
+
   Widget buildCart(Cart value, Widget? child) {
     if (value.cart.isEmpty) {
       return const Center(
@@ -24,9 +56,9 @@ class _CartPageState extends State<CartPage> {
           itemCount: value.cart.length,
           itemBuilder: (context, index) {
             return Container(
-              padding: const EdgeInsets.symmetric(horizontal: Sizes.extraLarge),
+              padding: const EdgeInsets.symmetric(horizontal: Sizes.large),
               margin: const EdgeInsets.symmetric(
-                  horizontal: Sizes.extraLarge, vertical: Sizes.giant),
+                  horizontal: Sizes.large, vertical: Sizes.giant),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(Sizes.large),
                   border: Border.all(color: Colors.grey[300]!)),
@@ -36,84 +68,67 @@ class _CartPageState extends State<CartPage> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(
-                        vertical: Sizes.large, horizontal: Sizes.giant),
+                        vertical: Sizes.large, horizontal: Sizes.medium),
                     child: Image.asset(value.cart[index].item.imagePath),
                   ),
                   Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: Sizes.extraLarge),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Text(
+                        value.cart[index].item.name,
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
+                          SizedBox(
+                            child: Text(
+                              "\$${value.cart[index].totalPrice}",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineLarge!
+                                  .copyWith(color: primaryColor),
+                            ),
+                          ),
                           Row(
                             children: [
-                              Text(
-                                value.cart[index].item.name,
-                                style: Theme.of(context).textTheme.titleLarge,
+                              InkWell(
+                                borderRadius:
+                                    BorderRadius.circular(Sizes.large),
+                                onTap: () => handleMinusQuantity(value, index),
+                                child: const Icon(
+                                  Icons.remove_circle,
+                                  color: primaryColor,
+                                  size: Sizes.giant * 1.4,
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: Sizes.large),
+                                child: Text(
+                                  value.cart[index].quantity.toString(),
+                                  style: TextStyle(fontSize: Sizes.giant),
+                                ),
+                              ),
+                              InkWell(
+                                borderRadius:
+                                    BorderRadius.circular(Sizes.large),
+                                onTap: () =>
+                                    handleIncreaseQuantity(value, index),
+                                child: const Icon(
+                                  Icons.add_circle,
+                                  color: primaryColor,
+                                  size: Sizes.giant * 1.4,
+                                ),
                               ),
                             ],
                           )
                         ],
-                      ),
-                    ),
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: Sizes.large),
-                        child: Text(
-                          "\$${value.cart[index].totalPrice}",
-                          style: Theme.of(context)
-                              .textTheme
-                              .headlineLarge!
-                              .copyWith(color: primaryColor),
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          IconButton(
-                            color: primaryColor,
-                            icon: const Icon(Icons.remove_circle),
-                            onPressed: () {
-                              try {
-                                value.decreaseItemQuantityInCart(
-                                    index: index, quantity: 1);
-                              } catch (e) {
-                                // notify the user about the reuslt
-                                showToast(e.toString().split(":")[1],
-                                    context: context,
-                                    position: const StyledToastPosition(
-                                        align: Alignment.center),
-                                    animation: StyledToastAnimation.fadeScale,
-                                    animDuration:
-                                        const Duration(milliseconds: 67));
-                              }
-                            },
-                          ),
-                          Text(value.cart[index].quantity.toString()),
-                          IconButton(
-                              color: primaryColor,
-                              onPressed: () {
-                                try {
-                                  value.increaseItemQuantityInCart(
-                                      index: index, quantity: 1);
-                                } catch (e) {
-                                  showToast(e.toString().split(":")[1],
-                                      context: context,
-                                      position: const StyledToastPosition(
-                                          align: Alignment.center),
-                                      animation: StyledToastAnimation.fadeScale,
-                                      animDuration:
-                                          const Duration(milliseconds: 67));
-                                }
-                              },
-                              icon: const Icon(Icons.add_circle))
-                        ],
                       )
                     ],
-                  )
+                  ))
                 ],
               ),
             );
@@ -131,19 +146,5 @@ class _CartPageState extends State<CartPage> {
         ),
         body: Consumer<Cart>(
             builder: (context, value, child) => buildCart(value, child)));
-  }
-}
-
-class CartItem extends StatefulWidget {
-  const CartItem({super.key});
-
-  @override
-  State<StatefulWidget> createState() => _CartItemState();
-}
-
-class _CartItemState extends State<CartItem> {
-  @override
-  Widget build(BuildContext context) {
-    return const Text('Cart Item');
   }
 }
